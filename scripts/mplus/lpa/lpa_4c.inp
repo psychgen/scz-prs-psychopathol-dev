@@ -1,0 +1,40 @@
+TITLE: lpa_4c
+DATA: FILE = "N:/data/durable/projects/scz_prs_general/data/scales_for_mplus.dat";
+VARIABLE: 
+NAMES = PREG_ID_2306 IID ext_18m ext_3yr ext_5yr int_18m int_3yr int_5yr mfq_8yr
+     cd_8yr hyp_8yr innat_8yr od_8yr scared_8yr X0_0001_resid X0_001_resid
+     X0_01_resid X0_05_resid X0_1_resid X0_2_resid X0_5_resid X1_resid sex;
+
+USEVARIABLES= 
+ext_18m ext_3yr ext_5yr int_18m int_3yr int_5yr mfq_8yr
+     cd_8yr hyp_8yr innat_8yr od_8yr scared_8yr X1_resid sex;
+MISSING=.;
+IDVARIABLE= IID;
+CLASSES= Cc (4);
+
+ANALYSIS: type=mixture; estimator=MLR; STARTS= 100 10;
+
+
+MODEL:
+%OVERALL%
+i1 s1 | ext_18m@0 ext_3yr@1.5 ext_5yr@3.5;
+i2 s2 | int_18m@0 int_3yr@1.5 int_5yr@3.5;
+Cc ON X1_resid;  
+
+ext_18m ON sex (gsex1);
+ext_3yr ON sex (gsex2);
+ext_5yr ON sex (gsex3);
+int_18m ON sex (gsex4);
+int_3yr ON sex (gsex5);
+int_5yr ON sex (gsex6);
+mfq_8yr ON sex;
+scared_8yr ON sex;
+cd_8yr ON sex;
+od_8yr ON sex;
+hyp_8yr ON sex;
+innat_8yr ON sex;
+
+output:  sampstat stdyx TECH1 Tech11 TECH14 SVALUES CINTERVAL ENTROPY;
+
+savedata: FILE IS lpa_4c.dat; 
+SAVE IS CPROB;
